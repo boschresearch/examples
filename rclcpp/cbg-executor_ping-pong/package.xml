@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>examples_rclcpp_minimal_multiexecutors</name>
-  <version>0.0.0</version>
-  <description>Example for use of multiple executors in same process</description>
+  <name>cbg-executor_ping-pong_cpp</name>
+  <version>0.0.1</version>
+  <description>Example for use of multiple callback-group executors in same process</description>
   <maintainer email="ralph.lange@de.bosch.com">Ralph Lange</maintainer>
   <license>Apache License 2.0</license>
 
