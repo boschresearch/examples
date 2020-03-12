@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(examples_rclcpp_minimal_multiexecutors)
+project(cbg-executor_ping-pong_cpp)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -16,11 +16,11 @@ find_package(std_msgs REQUIRED)
 
 include_directories(include)
 
-add_executable(minimal_multi-executors main.cpp src/PingSubNode.cpp src/PongSubNode.cpp)
-ament_target_dependencies(minimal_multi-executors rclcpp std_msgs)
+add_executable(ping-pong main.cpp src/PingSubNode.cpp src/PongSubNode.cpp)
+ament_target_dependencies(ping-pong rclcpp std_msgs)
 
-install(TARGETS minimal_multi-executors
-  DESTINATION lib/${PROJECT_NAME}
+install(TARGETS ping-pong
+  DESTINATION bin/${PROJECT_NAME}
 )
 
 ament_package()

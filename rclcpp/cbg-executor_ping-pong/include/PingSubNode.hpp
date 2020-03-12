@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MINIMAL_MULTI_EXECUTORS__PING_SUB_NODE_HPP_
-#define MINIMAL_MULTI_EXECUTORS__PING_SUB_NODE_HPP_
+#ifndef CBG_EXECUTOR_PING_PONG__PING_SUB_NODE_HPP_
+#define CBG_EXECUTOR_PING_PONG__PING_SUB_NODE_HPP_
 
 #include <memory>
 #include <string>
@@ -66,4 +66,4 @@ private:
   void pong_subscription_callback(const std_msgs::msg::Int32::SharedPtr msg);
 };
 
-#endif  // MINIMAL_MULTI_EXECUTORS__PING_SUB_NODE_HPP_
+#endif  // CBG_EXECUTOR_PING_PONG__PING_SUB_NODE_HPP_

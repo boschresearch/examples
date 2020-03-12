@@ -1,16 +1,16 @@
-# examples_rclcpp_minimal_multiexecutors
+# cbg-executor_ping-pong_cpp
 
-This ROS2 package provides a small example for the use of the callback-group-grained Executor concept proposed in the meta-executor branch of the rclcpp fork at [https://github.com/boschresearch/ros2_rclcpp/](https://github.com/boschresearch/ros2_rclcpp/).
+This package provides a small example for the use of the Callback-group-level Executor concept.
 
-The callback-group-grained Executor leverages the callback-group concept in rclcpp by introducing real-time profiles such as RT-CRITICAL and BEST-EFFORT in the callback-group API (i.e. rclcpp/callback_group.hpp). Each callback requiring specific real-time guarantees, when created, may therefore be associated with a dedicated callback group. With this in place, the Executor class and depending classes (e.g., for memory allocation) were enhanced to operate at a finer, callback-group-level granularity.
+The Callback-group-level Executor leverages the callback-group concept in rclcpp by introducing real-time profiles such as RT-CRITICAL and BEST-EFFORT in the callback-group API (i.e. [rclcpp/callback_group.hpp](https://github.com/microROS/rclcpp/blob/master/rclcpp/include/rclcpp/callback_group.hpp)). Each callback requiring specific real-time guarantees, when created, may therefore be associated with a dedicated callback group. With this in place, the Executor class and depending classes (e.g., for memory allocation) were enhanced to operate at a finer, callback-group-level granularity.
 
 This allows a single node to have callbacks with different real-time profiles assigned to different Executor instances – within one process. Thus, an Executor instance can be dedicated to one or few specific callback groups and the Executor’s thread (or threads) can be prioritized according to the real-time requirements of these groups. For example, all time-critical callbacks may be handled by an "RT-CRITICAL" Executor instance running at the highest scheduler priority.
 
-As a proof of concept, we implemented a small test bench in the present package *examples_rclcpp_minimal_multiexecutors*. The test bench comprises a Ping node and a Pong node which exchange real-time and best-effort messages simultaneously with each other. Each class of messages is handled with a dedicated Executor, as illustrated in the following figure.
+As a proof of concept, we implemented a small test bench in the present package *cbg-executor_ping-pong_cpp*. The test bench comprises a Ping node and a Pong node which exchange real-time and best-effort messages simultaneously with each other. Each class of messages is handled with a dedicated Executor, as illustrated in the following figure.
 
 ![](doc/ping_pong_diagram.png)
 
-The Ping node can be configured to send messages at a configured rate. The Pong node takes these ping messages and replies each of them. Before sending the reply, it can be configured to burn cycles (thereby varying the processor load) to simulate some message processing. We provide bash scripts to test intra-process and inter-process communication scenarios, wherein the nodes are co-located either in one process or two processes, respectively. These scripts also vary the message rates and processor loads. After each run, the Ping node outputs the measured the throughput of real-time and best effort messages.
+The Ping node can be configured to send messages at a configured rate. The Pong node takes these ping messages and replies each of them. Before sending the reply, it can be configured to burn cycles (thereby varying the processor load) to simulate some message processing. We provide bash scripts to test intra-process and inter-process communication scenarios, wherein the nodes are co-located either in one process or two processes, respectively. These scripts also vary the message rates and processor loads. After each run, the Ping node outputs the measured throughput of real-time and best effort messages.
 
 
 ## Running the test bench
@@ -18,7 +18,7 @@ The Ping node can be configured to send messages at a configured rate. The Pong 
 After building the test bench with [colcon](https://github.com/ros2/ros2/wiki/Colcon-Tutorial), the Ping and Pong nodes may be either started in one process or in two processes. Please note that the test bench requires sudo privileges to be able to change the thread priorities using `pthread_setschedparam(..)`. Start the executable by
 
 ```
-ros2 run examples_rclcpp_minimal_multiexecutors minimal_multi-executors args...
+ros2 run cbg-executor_ping-pong_cpp ping-pong args...
 ```
 
 where `args...` are five or six arguments as follows:
@@ -49,7 +49,7 @@ The shell run\* scripts in this folder run various experiments in sequence. For 
 
 ## Implementation Details
 
-The algorithms of the Ping node and of the Pong node are factored out into classes [_PingSubNode_](include/PingSubNode.hpp) and [_PongSubNode_](include/PongSubNode.hpp) - configurable with regard to the real-time profile and the topic prefix. Thus, the Ping node contains of two instances of the _PingSubNode_ and the Pong node contains two instances of _PongSubNode_. (And the test bench could be easily extended to more than two ping-pong paths.)
+The algorithms of the Ping node and of the Pong node are factored out into classes [_PingSubNode_](include/PingSubNode.hpp) and [_PongSubNode_](include/PongSubNode.hpp) - configurable with regard to the real-time profile and the topic prefix. Thus, the Ping node contains two instances of the _PingSubNode_ and the Pong node contains two instances of _PongSubNode_. (And the test bench could be easily extended to more than two ping-pong paths.)
 
 The PingSubNode contains a timer for sending the ping messages and a subscription for the corresponding pong messages. Also, it records the number of messages being sent and received and measures the roundtrip time.
 
