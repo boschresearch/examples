@@ -30,16 +30,16 @@ public:
   typedef std::shared_ptr<PongSubNode> SharedPtr;
 
   PongSubNode(
-    rclcpp::Node::SharedPtr node, rclcpp::callback_group::RealTimeClass cbg_class,
+    rclcpp::Node::SharedPtr node, rclcpp::RealTimeClass cbg_class,
     const std::string & topics_prefix, std::chrono::microseconds cpu_load);
 
   virtual ~PongSubNode() = default;
 
-  rclcpp::callback_group::CallbackGroup::SharedPtr get_callback_group() {return callback_group_;}
+  rclcpp::CallbackGroup::SharedPtr get_callback_group() {return callback_group_;}
 
 private:
   /// The callback group for the ping subscription.
-  rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_;
+  rclcpp::CallbackGroup::SharedPtr callback_group_;
 
   /// Prefix for the ping and pong topics - here RT or BE.
   const std::string topics_prefix_;

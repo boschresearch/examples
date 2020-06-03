@@ -20,7 +20,8 @@ add_executable(ping-pong main.cpp src/PingSubNode.cpp src/PongSubNode.cpp)
 ament_target_dependencies(ping-pong rclcpp std_msgs)
 
 install(TARGETS ping-pong
-  DESTINATION bin/${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}
 )
 
+ament_export_dependencies(rclcpp)
 ament_package()

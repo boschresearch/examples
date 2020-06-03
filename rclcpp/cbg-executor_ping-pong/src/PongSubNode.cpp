@@ -21,7 +21,7 @@ using std::placeholders::_1;
 
 
 PongSubNode::PongSubNode(
-  rclcpp::Node::SharedPtr node, rclcpp::callback_group::RealTimeClass cbg_class,
+  rclcpp::Node::SharedPtr node, rclcpp::RealTimeClass cbg_class,
   const std::string & topics_prefix, std::chrono::microseconds cpu_load)
 : topics_prefix_(topics_prefix), cpu_load_(cpu_load)
 {
@@ -30,19 +30,23 @@ PongSubNode::PongSubNode(
   assert(cpu_load_ >= std::chrono::microseconds::zero());
 
   callback_group_ = node->create_callback_group(
-    rclcpp::callback_group::CallbackGroupType::MutuallyExclusive, cbg_class);
+    rclcpp::CallbackGroupType::MutuallyExclusive, cbg_class);
+
+  rclcpp::SubscriptionOptionsWithAllocator<std::allocator<void>> options;
+  options.callback_group = callback_group_;
 
   ping_subscription_ = node->create_subscription<std_msgs::msg::Int32>(topics_prefix_ + "_ping",
+      rclcpp::SystemDefaultsQoS(),
       std::bind(&PongSubNode::ping_subscription_callback, this,
-      _1), rmw_qos_profile_default, callback_group_);
-  pong_publisher_ = node->create_publisher<std_msgs::msg::Int32>(topics_prefix_ + "_pong");
+      _1), options);
+  pong_publisher_ = node->create_publisher<std_msgs::msg::Int32>(topics_prefix_ + "_pong", rclcpp::SystemDefaultsQoS());
 }
 
 
 void PongSubNode::ping_subscription_callback(const std_msgs::msg::Int32::SharedPtr msg)
 {
   burn_cpu_cycles();
-  pong_publisher_->publish(msg);
+  pong_publisher_->publish(*msg);
 }
 
 

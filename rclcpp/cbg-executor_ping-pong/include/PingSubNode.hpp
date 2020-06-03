@@ -32,19 +32,19 @@ public:
   typedef std::shared_ptr<PingSubNode> SharedPtr;
 
   PingSubNode(
-    rclcpp::Node::SharedPtr node, rclcpp::callback_group::RealTimeClass cbg_class,
+    rclcpp::Node::SharedPtr node, rclcpp::RealTimeClass cbg_class,
     const std::string & topics_prefix, const std::chrono::microseconds send_period);
 
   virtual ~PingSubNode() = default;
 
-  rclcpp::callback_group::CallbackGroup::SharedPtr get_callback_group() {return callback_group_;}
+  rclcpp::CallbackGroup::SharedPtr get_callback_group() {return callback_group_;}
 
   /// Prints out the measured message throughput and latency.
   void print_statistics();
 
 private:
   /// The callback group for the timer and the pong subscription.
-  rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_{};
+  rclcpp::CallbackGroup::SharedPtr callback_group_{};
 
   /// Prefix for the ping and pong topics - here RT or BE.
   const std::string topics_prefix_;

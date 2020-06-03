@@ -21,7 +21,7 @@ using namespace std::chrono_literals;
 using namespace std::chrono;
 using std::placeholders::_1;
 
-using rclcpp::executor::Executor;
+using rclcpp::Executor;
 using rclcpp::executors::SingleThreadedExecutor;
 
 const std::chrono::seconds EXPERIMENT_DURATION = 10s;
@@ -84,7 +84,7 @@ std::chrono::nanoseconds get_current_thread_clock_time(clockid_t id)
 /// Here: rt = real-time = high scheduler priority and be = best-effort = low scheduler priority.
 int main(int argc, char * argv[])
 {
-  using rclcpp::callback_group::RealTimeClass;
+  using rclcpp::RealTimeClass;
   using std::chrono::milliseconds;
   using std::chrono::nanoseconds;
 

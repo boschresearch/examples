@@ -21,7 +21,7 @@ using namespace std::chrono;
 using std::placeholders::_1;
 
 PingSubNode::PingSubNode(
-  rclcpp::Node::SharedPtr node, rclcpp::callback_group::RealTimeClass cbg_class,
+  rclcpp::Node::SharedPtr node, rclcpp::RealTimeClass cbg_class,
   const std::string & topics_prefix, const std::chrono::microseconds send_period)
 : topics_prefix_(topics_prefix)
 {
@@ -29,17 +29,20 @@ PingSubNode::PingSubNode(
   assert(!topics_prefix.empty());
 
   callback_group_ = node->create_callback_group(
-    rclcpp::callback_group::CallbackGroupType::MutuallyExclusive, cbg_class);
+    rclcpp::CallbackGroupType::MutuallyExclusive, cbg_class);
 
   ping_sent_timestamps_.reserve(10000000); // TODO(Ralph): Adjust size to experiment duration and send period.
   pong_received_timestamps_.resize(10000000);
 
+  rclcpp::SubscriptionOptionsWithAllocator<std::allocator<void>> options;
+  options.callback_group = callback_group_;
+
   ping_timer_ = node->create_wall_timer(send_period, std::bind(&PingSubNode::ping_timer_callback,
       this), callback_group_);
-  ping_publisher_ = node->create_publisher<std_msgs::msg::Int32>(topics_prefix_ + "_ping");
-  pong_subscription_ = node->create_subscription<std_msgs::msg::Int32>(topics_prefix_ + "_pong",
+  ping_publisher_ = node->create_publisher<std_msgs::msg::Int32>(topics_prefix_ + "_ping", rclcpp::SystemDefaultsQoS());
+  pong_subscription_ = node->create_subscription<std_msgs::msg::Int32>(topics_prefix_ + "_pong", rclcpp::SystemDefaultsQoS(),
       std::bind(&PingSubNode::pong_subscription_callback, this,
-      _1), rmw_qos_profile_default, callback_group_);
+      _1), options);
 }
 
 
