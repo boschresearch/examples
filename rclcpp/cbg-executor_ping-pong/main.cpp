@@ -141,12 +141,14 @@ int main(int argc, char * argv[])
 
   // Create and configure thread for the real-time executor, i.e. the high-priority executor.
   std::thread thread_rt([&]() {
+      std::cout << "Thread with id=" << std::this_thread::get_id() << " is going to call executor_rt.spin() ..." << std::endl;
       executor_rt.spin();
     });
   configure_thread(thread_rt, true, cpuId);
 
   // Create and configure thread for the best-effort executor, i.e. the low-priority executor.
   std::thread thread_be([&]() {
+      std::cout << "Thread with id=" << std::this_thread::get_id() << " is going to call executor_be.spin() ..." << std::endl;
       executor_be.spin();
     });
   configure_thread(thread_be, false, cpuId);
