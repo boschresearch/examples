@@ -136,7 +136,6 @@ int main(int argc, char * argv[])
     pong_node = std::make_shared<rclcpp::Node>("pong");
     pong_rt = std::make_shared<PongSubNode>(pong_node, RealTimeClass::RealTimeCritical, "RT", rt_busyloop_us);
     pong_be = std::make_shared<PongSubNode>(pong_node, RealTimeClass::BestEffort, "BE", be_busyloop_us);
-    executor_rt.add_callback_group(pong_node->get_callback_groups()[0].lock(), pong_node->get_node_base_interface());
     executor_rt.add_callback_group(pong_rt->get_callback_group(), pong_node->get_node_base_interface());
     executor_be.add_callback_group(pong_be->get_callback_group(), pong_node->get_node_base_interface());
   }
