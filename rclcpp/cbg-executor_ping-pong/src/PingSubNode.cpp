@@ -83,11 +83,13 @@ void PingSubNode::print_statistics()
       latencySum += latency;
     }
   }
-  std::chrono::system_clock::duration latencyAvg = latencySum / pong_received_count_;
+  if (pong_received_count_ > 0) {
+    std::chrono::system_clock::duration latencyAvg = latencySum / pong_received_count_;
 
-  std::cout << "latency on " << topics_prefix_ << " path: min=" <<
-    std::chrono::duration_cast<std::chrono::microseconds>(latencyMin).count() <<
-    "us max=" << std::chrono::duration_cast<std::chrono::microseconds>(latencyMax).count() <<
-    "us avg=" << std::chrono::duration_cast<std::chrono::microseconds>(latencyAvg).count() <<
-    "us " << std::endl;
+    std::cout << "latency on " << topics_prefix_ << " path: min=" <<
+      std::chrono::duration_cast<std::chrono::microseconds>(latencyMin).count() <<
+      "us max=" << std::chrono::duration_cast<std::chrono::microseconds>(latencyMax).count() <<
+      "us avg=" << std::chrono::duration_cast<std::chrono::microseconds>(latencyAvg).count() <<
+      "us " << std::endl;
+  }
 }
