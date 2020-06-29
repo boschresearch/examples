@@ -121,7 +121,6 @@ int main(int argc, char * argv[])
     ping_node = std::make_shared<rclcpp::Node>("ping");
     ping_rt = std::make_shared<PingSubNode>(ping_node, RealTimeClass::RealTimeCritical, "RT", rt_ping_period_us);
     ping_be = std::make_shared<PingSubNode>(ping_node, RealTimeClass::BestEffort, "BE", be_ping_period_us);
-    executor_rt.add_callback_group(ping_node->get_callback_groups()[0].lock(), ping_node->get_node_base_interface());
     executor_rt.add_callback_group(ping_rt->get_callback_group(), ping_node->get_node_base_interface());
     executor_be.add_callback_group(ping_be->get_callback_group(), ping_node->get_node_base_interface());
   }
